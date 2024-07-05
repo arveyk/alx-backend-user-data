@@ -10,20 +10,21 @@ import os
 from typing import List
 
 # level=logging.INFO, format='%(asctime)s:%(levelname)s')
-PII_FIELDS = {
-        "name": '',
-        "email": '',
-        "ssn": '',
-        "phone": '',
-        "password": ''
-    }
+PII_FIELDS = (
+        {"name": ''},
+        {"email": ''},
+        {"ssn": ''},
+        {"phone": ''},
+        {"password": ''}
+        )
 with open('user_data.csv', 'r') as csv_file:
     reader = csv.DictReader(csv_file)
+    """Open csv and create PII_FIELDS from file
+    """
     for line in reader:
         for key in line.keys():
             if key in PII_FIELDS:
                 PII_FIELDS[key] = line[key]
-
 
 
 def filter_datum(fields, redactions, message, separator):
@@ -65,10 +66,19 @@ class RedactingFormatter(logging.Formatter):
     logger = logging.getLogger(__name__)
 
     def __init__(self, fields: List[str]):
+        """ Initialize class instance
+        Args:
+            fields: list of fields to redact
+        Returns: No return value(implicitly None)
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """ Formats the Log info
+        Args:
+            records: the Log record to format
+        Returns: formated log record"""
         name = record.name
         logger = logging.getLogger(name)
 
@@ -78,7 +88,12 @@ class RedactingFormatter(logging.Formatter):
         record.msg = encr_info
         return logger.handle(record)
 
+
 def get_logger() -> logging.Logger:
+    """ Function to return a logger
+    Args: none
+    Return: a logger that can be used to log info
+    """
     logger = logging.getLogger('user_data')
     logger.setLevel(logging.INFO)
     logger.propagate = False
@@ -96,6 +111,7 @@ def get_logger() -> logging.Logger:
 def get_db():
     """Get database
     Args: None
+    Returns: a database connection
     """
 
     DB_USERNAME = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
@@ -104,16 +120,18 @@ def get_db():
     DB_NAME = os.environ.get('PERSONAL_DATA_DB_NAME', 'my_db')
 
     conxn = mysql.connector.connect(
-            user = DB_USERNAME,
-            password = DB_PASSWORD,
-            host = DB_HOST,
-            database = DB_NAME
+            user=DB_USERNAME,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            database=DB_NAME
             )
     return conxn
 
 
 def main():
     """Get database, display
+    Args: None
+    Returns: No return value
     """
 
     dbConnection = get_db()
@@ -126,6 +144,7 @@ def main():
         print("{} {}".format(email, phone))
 
 
-
 if __name__ == '__main__':
+    """Condition to ensure only main is executed when this module is
+    imported"""
     main()
