@@ -4,13 +4,14 @@
 import bcrypt
 
 
-def hash_password(password: str):
+def hash_password(password: str) -> bytes:
     """
     create a hash for a paswd
     Args:
         password: the password to hash
     Returns: hashed btyes of the password
     """
+
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     return hashed
 
