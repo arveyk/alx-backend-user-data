@@ -59,7 +59,6 @@ def filter_datum(fields: List, redactions: str, message: str,
                 filtered = re.sub(repl_str, redactions, filtered)
             else:
                 filtered = filtered + word[0] + '=' + redactions + separator
-
     return filtered
 
 
