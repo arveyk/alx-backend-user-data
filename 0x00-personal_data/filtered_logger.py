@@ -28,7 +28,7 @@ with open('user_data.csv', 'r') as csv_file:
                 PII_FIELDS[key] = line[key]
 
 
-def filter_datum(fields: List[str], redactions: str, message: str,
+def filter_datum(fields: List, redactions: str, message: str,
         separator: str) -> str:
     """Function to filter data
     Args:
