@@ -29,7 +29,7 @@ with open('user_data.csv', 'r') as csv_file:
 
 
 def filter_datum(fields: List, redactions: str, message: str,
-        separator: str) -> str:
+                 separator: str) -> str:
     """Function to filter data
     Args:
         fields: the fields to redact
@@ -59,6 +59,7 @@ def filter_datum(fields: List, redactions: str, message: str,
                 filtered = re.sub(repl_str, redactions, filtered)
             else:
                 filtered = filtered + word[0] + '=' + redactions + separator
+
     return filtered
 
 
@@ -115,7 +116,7 @@ def get_logger() -> logging.Logger:
     return logger.msg()
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Get database
     Args: None
     Returns: a database connection
