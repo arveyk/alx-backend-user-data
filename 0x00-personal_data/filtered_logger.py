@@ -22,10 +22,12 @@ with open('user_data.csv', 'r') as csv_file:
     reader = csv.DictReader(csv_file)
     """Open csv and create PII_FIELDS from file
     """
+    PII_len = len(PII_FIELDS)
     for line in reader:
         for key in line.keys():
-            if key in PII_FIELDS:
-                PII_FIELDS[key] = line[key]
+            for elem in range(PII_len):
+                if key in PII_FIELDS[elem]:
+                    PII_FIELDS[elem][key] = line[key]
 
 
 def filter_datum(fields: List, redactions: str, message: str,
