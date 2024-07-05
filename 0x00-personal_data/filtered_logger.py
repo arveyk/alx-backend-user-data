@@ -7,6 +7,7 @@ import bcrypt
 import logging
 import mysql.connector
 import os
+import re
 from typing import List
 
 # level=logging.INFO, format='%(asctime)s:%(levelname)s')
@@ -36,7 +37,7 @@ def filter_datum(fields, redactions, message, separator):
         separator: separator to use
     Raturns: the filtered message
     """
-
+    # filtered = re.sub(fields, redactions, message)
     filtered = ''
     tempList = message.split(separator)
     for field in tempList:
@@ -47,10 +48,16 @@ def filter_datum(fields, redactions, message, separator):
             if len(word) > 1:
                 filtered = filtered + word[0] + '=' + word[1] + separator
             else:
-                filtered = filtered + word[0] + '=' + redactions + separator
+                filtered = filtered + word[0]
+                # + '=' + redactions + separator
 
         else:
-            filtered = filtered + word[0] + '=' + redactions + separator
+            if len(word) > 1:
+                repl_str = word[1]
+                filtered = filtered + word[0] + '=' + word[1] + separator
+                filtered = re.sub(repl_str, redactions, filtered)
+            else:
+                filtered = filtered + word[0] + '=' + redactions + separator
 
     return filtered
 
