@@ -16,6 +16,22 @@ class Auth:
             excluded_path: path to special files
         Returns: True if authentication is required to access
         """
+        last_char = '/'
+        if path is None:
+            return True
+        if excluded_paths is None or len(excluded_paths) == 0:
+            return True
+        if path not in excluded_paths:
+            if path[-1] != last_char:
+                print(path)
+                path += last_char
+                if path not in excluded_paths:
+                    return True
+            return True
+
+        status_path = "/api/v1/status"
+        if status_path in excluded_paths:
+            return False
         return False
 
     def authorization_header(self, request=None) -> str:
