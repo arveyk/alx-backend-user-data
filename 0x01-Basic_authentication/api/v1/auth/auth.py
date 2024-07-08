@@ -23,19 +23,22 @@ class Auth:
             return True
         if path not in excluded_paths:
             if path[-1] != last_char:
-                print(path)
                 path += last_char
                 if path not in excluded_paths:
                     return True
             return True
 
-        status_path = "/api/v1/status"
-        if status_path in excluded_paths:
+        status = "/api/v1/status"
+        status2 = status + '/'
+        if status in excluded_paths or status in excluded_paths:
             return False
         return False
 
     def authorization_header(self, request=None) -> str:
         """ Return authentication header
+        Args:
+            request: a http request
+        Return: None
         """
         return None
 
