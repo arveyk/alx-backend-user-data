@@ -24,8 +24,8 @@ class Auth:
         if path not in excluded_paths:
             if path[-1] != last_char:
                 path += last_char
-                if path not in excluded_paths:
-                    return True
+                if path in excluded_paths:
+                    return False
             return True
 
         status = "/api/v1/status"
@@ -40,7 +40,12 @@ class Auth:
             request: a http request
         Return: None
         """
-        return None
+        if request is None:
+            return None
+        # if request.get("Authentication"):
+        #    return None
+        # return request.get("Authentication")
+        return request.headers
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Check the current user
@@ -49,3 +54,9 @@ class Auth:
         Returns: the current user's name
         """
         return None
+
+
+class BasicAuth(Auth):
+    """Basic Auth class
+    """
+    pass
