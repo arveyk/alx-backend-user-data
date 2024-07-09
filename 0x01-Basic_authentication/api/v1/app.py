@@ -49,6 +49,9 @@ if auth:
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
+    Args:
+        error: error msg
+    Returns: error msg jsonified
     """
     return jsonify({"error": "Not found"}), 404
 
@@ -56,6 +59,9 @@ def not_found(error) -> str:
 @app.errorhandler(401)
 def unauthorized(error) -> str:
     """Unauthorized access handler
+    Args:
+        error: error msg
+    Returns: 401 error msg
     """
     return jsonify({"error": "Unauthorized"}), 401
 
@@ -63,6 +69,9 @@ def unauthorized(error) -> str:
 @app.errorhandler(403)
 def forbidden(error) -> str:
     """Forbidden access handler
+    Args:
+        error: error msg
+    Returns: 403 error msg
     """
     return jsonify({"error": "Forbidden"}), 403
 
