@@ -22,6 +22,10 @@ class Auth:
         if excluded_paths is None or len(excluded_paths) == 0:
             return True
         if path not in excluded_paths:
+            if path[-1] == '*':
+                for elem in excluded_paths:
+                    if elem.startswith(path):
+                        return False
             if path[-1] != last_char:
                 path += last_char
                 if path in excluded_paths:
