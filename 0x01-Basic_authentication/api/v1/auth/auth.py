@@ -54,9 +54,3 @@ class Auth:
         Returns: the current user's name
         """
         return None
-
-
-class BasicAuth(Auth):
-    """Basic Auth class
-    """
-    pass
