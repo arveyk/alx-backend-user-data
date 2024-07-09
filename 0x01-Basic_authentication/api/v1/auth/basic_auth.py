@@ -9,6 +9,11 @@ from typing import TypeVar, List
 class BasicAuth(Auth):
     """Basic Auth class
     """
+    
+    def __init__(self):
+        """Initialize"""
+        super().__init__(self)
+
     def extract_base64_authorization_header(self,
                                             authorization_header: str) -> str:
 
