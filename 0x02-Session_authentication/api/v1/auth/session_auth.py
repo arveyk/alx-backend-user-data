@@ -2,6 +2,7 @@
 """Session Authentication
 """
 from api.v1.auth.auth import Auth
+import os
 import uuid
 
 
@@ -42,3 +43,21 @@ class SessionAuth(Auth):
         if isinstance(session_id, str) is False:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def session_cookie(self, request=None):
+        """Returns a cookie value for a request
+        Args:
+            requests: Http request
+        Returns: cookie value"""
+        if request is None:
+            return None
+        ssn_name = os.getenv('SESSION_NAME')
+        return request._my_session_id
+
+    def current_user(self, request=None):
+        """Return a user based on cookie value
+        Args:
+            request: resource to be retrived
+        Returns: None
+        """
+        self.session_cookie(request)

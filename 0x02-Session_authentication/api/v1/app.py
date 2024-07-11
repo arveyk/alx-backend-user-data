@@ -45,6 +45,9 @@ if auth:
             result = auth.authorization_header(request)
             if result is None:
                 abort(401)
+            res = auth.session_cookie(request)
+            if res is None:
+                return None
             request.current_user = auth.current_user(request)
             if result is None:
                 abort(403)
