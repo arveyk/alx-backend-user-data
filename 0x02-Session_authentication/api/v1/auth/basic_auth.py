@@ -105,8 +105,8 @@ class BasicAuth(Auth):
         Returns: Current User
         """
         header = self.authorization_header(request)
-        base_hdr = extract_base64_authorozation_header(header)
-        decoded = decode_base64_authorization_header(base_hdr)
-        user = extract_user_credentials(decoded)
-        return user_object_from_credentials(user)
+        base_hdr = self.extract_base64_authorization_header(header)
+        decoded = self.decode_base64_authorization_header(base_hdr)
+        user = self.extract_user_credentials(decoded)
+        return self.user_object_from_credentials(user[0], user[1])
 
