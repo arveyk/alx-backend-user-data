@@ -85,11 +85,11 @@ class BasicAuth(Auth):
         if isinstance(user_email, str) is False or\
                 isinstance(user_pwd, str) is False:
             return None
-        if User.count() == 0:
-            """new_user = User(user_email, user_pwd)
-            return new_user
-            """
+        user = User()
+        if user.count() == 0:
+            new_user = User(user_email, user_pwd)
             return None
+
         user_s = User.search({'email': user_email})
         if len(user_s) == 0:
             return None
