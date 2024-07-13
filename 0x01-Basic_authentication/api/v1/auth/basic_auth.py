@@ -4,6 +4,7 @@
 from api.v1.auth.auth import Auth
 import base64
 from flask import request
+from models.user import User
 from typing import TypeVar, List
 
 
@@ -70,3 +71,47 @@ class BasicAuth(Auth):
         user_cred = decode_base64_authorization_header.split(':')
         if len(user_cred) > 1:
             return (user_cred[0], user_cred[1])
+
+    def user_object_from_credentials(self, user_email: str, user_pwd: str)\
+            -> TypeVar('User'):
+        """Creates a user object from credentials obtained
+            Args:
+                user_email: email address
+                user_pwd: user password
+            Returns: User instance
+        """
+        if user_email is None or user_pwd is None:
+            return None
+        if isinstance(user_email, str) is False or\
+                isinstance(user_pwd, str) is False:
+            return None
+        if User.count() == 0:
+            """new_user = User(user_email, user_pwd)
+            return new_user
+            """
+            return None
+        user_s = User.search({'email': user_email})
+        if len(user_s) == 0:
+            return None
+        user_obj = user_s[0]
+        if user_obj.is_valid_password(user_pwd) is False:
+            return None
+        return user_obj
+
+        # if user_s.is_valid_password(user_pwd):
+        #    if user_s.password != user_pwd:
+        #        return None
+        #    return user_s
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """Retrieve current user
+        Args:
+            request: request object or somethin
+        Returns: Current User
+        """
+        header = self.authorization_header(request)
+        base_hdr = extract_base64_authorozation_header(header)
+        decoded = decode_base64_authorization_header(base_hdr)
+        user = extract_user_credentials(decoded)
+        return user_object_from_credentials(user)
+
