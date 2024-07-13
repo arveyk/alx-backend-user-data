@@ -26,7 +26,7 @@ class Auth:
             for elem in excluded_paths:
                 if elem[-1] == '*':
                     search_path = elem[:len(elem) - 1]
-                    if elem.startswith(search_path):
+                    if path.startswith(search_path):
                         find = True
                 if find is True:
                     return False
