@@ -2,7 +2,7 @@
 """ Main 5
 """
 import uuid
-from api.ve.auth.basic_auth import BasicAuth
+from api.v1.auth.basic_auth import BasicAuth
 from models.user import User
 
 """ Create a user test"""
