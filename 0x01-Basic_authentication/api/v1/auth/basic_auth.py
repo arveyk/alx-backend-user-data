@@ -74,7 +74,7 @@ class BasicAuth(Auth):
         if cred_len > 1:
             if cred_len > 2:
                 with_colon = ''
-                
+
                 for i in range(1, cred_len):
                     with_colon += user_cred[i]
                     if i < cred_len - 1:
