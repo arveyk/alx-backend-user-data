@@ -17,11 +17,7 @@ auth = None
 # auth = os.environ.get('AUTH_TYPE')
 auth = getenv('AUTH_TYPE')
 if auth:
-    if auth == 'session_auth':
-        from api.v1.auth.session_auth import SessionAuth
-        auth = SessionAuth()
-
-    elif auth == 'basic_auth':
+    if auth == 'basic_auth':
         from api.v1.auth.basic_auth import BasicAuth
         auth = BasicAuth()
     else:
@@ -45,10 +41,7 @@ if auth:
             result = auth.authorization_header(request)
             if result is None:
                 abort(401)
-            res = auth.session_cookie(request)
-            if res is None:
-                return None
-            request.current_user = auth.current_user(request)
+            request.current_user= auth.current_user(request)
             if result is None:
                 abort(403)
 
