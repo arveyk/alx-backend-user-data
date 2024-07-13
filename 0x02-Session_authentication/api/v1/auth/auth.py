@@ -22,10 +22,15 @@ class Auth:
         if excluded_paths is None or len(excluded_paths) == 0:
             return True
         if path not in excluded_paths:
-            if path[-1] == '*':
-                for elem in excluded_paths:
-                    if elem.startswith(path):
-                        return False
+            find = False
+            for elem in excluded_paths:
+                if elem[-1] == '*':
+                    search_path = elem[:len(elem) - 1]
+                    if path.startswith(search_path):
+                        find = True
+                if find is True:
+                    return False
+
             if path[-1] != last_char:
                 path += last_char
                 if path in excluded_paths:
@@ -46,10 +51,9 @@ class Auth:
         """
         if request is None:
             return None
-        # if request.get("Authentication"):
-        #    return None
-        # return request.get("Authentication")
-        return request.headers
+        if request.headers.get("Authorization") is None:
+            return None
+        return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Check the current user

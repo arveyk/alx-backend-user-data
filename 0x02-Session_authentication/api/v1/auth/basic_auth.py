@@ -68,8 +68,18 @@ class BasicAuth(Auth):
             return (None, None)
         if ':' not in decode_base64_authorization_header:
             return (None, None)
+
         user_cred = decode_base64_authorization_header.split(':')
-        if len(user_cred) > 1:
+        cred_len = len(user_cred)
+        if cred_len > 1:
+            if cred_len > 2:
+                with_colon = ''
+
+                for i in range(1, cred_len):
+                    with_colon += user_cred[i]
+                    if i < cred_len - 1:
+                        with_colon += ':'
+                return (user_cred[0], with_colon)
             return (user_cred[0], user_cred[1])
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str)\
@@ -85,13 +95,18 @@ class BasicAuth(Auth):
         if isinstance(user_email, str) is False or\
                 isinstance(user_pwd, str) is False:
             return None
-        if User.count == 0:
+        user = User()
+        if user.count() == 0:
             new_user = User(user_email, user_pwd)
-            return new_user
+            return None
+
         user_s = User.search({'email': user_email})
         if len(user_s) == 0:
             return None
-        return user_s
+        user_obj = user_s[0]
+        if user_obj.is_valid_password(user_pwd) is False:
+            return None
+        return user_obj
 
         # if user_s.is_valid_password(user_pwd):
         #    if user_s.password != user_pwd:
@@ -107,6 +122,5 @@ class BasicAuth(Auth):
         header = self.authorization_header(request)
         base_hdr = self.extract_base64_authorization_header(header)
         decoded = self.decode_base64_authorization_header(base_hdr)
-        user = self.extract_user_credentials(decoded)
-        return self.user_object_from_credentials(user[0], user[1])
-
+        user_cred = self.extract_user_credentials(decoded)
+        return self.user_object_from_credentials(user_cred[0], user_cred[1])
