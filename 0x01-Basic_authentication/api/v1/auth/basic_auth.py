@@ -114,4 +114,3 @@ class BasicAuth(Auth):
         decoded = decode_base64_authorization_header(base_hdr)
         user = extract_user_credentials(decoded)
         return user_object_from_credentials(user)
-
