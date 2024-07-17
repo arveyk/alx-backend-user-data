@@ -54,7 +54,8 @@ class DB:
             result = ""
             key1 = list(kwarg.values())
             #result = self.__session.query(User).filter_by(email=key1[0]).one()
-            result = self.__session.query(User).filter(User.email == key1[0]).one()
+            result = self.__session.query(User).filter(
+                    User.email == key1[0]).one()
             return result
         except NoResultFound as err:
             raise(err)
@@ -69,7 +70,11 @@ class DB:
         Args:
         Returns:
         """
-        #user = self.find_user_by(user_id)
+        try:
+            user = self.find_user_by(user_id)
+            self.session
+        except Exception as e:
+            raise(e)
         # update user 
         # commit changes
         #if value not found in user:
