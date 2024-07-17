@@ -53,7 +53,6 @@ class DB:
         try:
             result = ""
             key1 = list(kwarg.values())
-            #result = self.__session.query(User).filter_by(email=key1[0]).one()
             result = self.__session.query(User).filter(
                     User.email == key1[0]).one()
             return result
@@ -61,9 +60,9 @@ class DB:
             raise(err)
         except InvalidRequestError as invalid:
             raise(invalid)
-        #query and filter by input argument
-        #NoResultFound
-        #InvalidRequestError
+        # query and filter by input argument
+        # NoResultFound
+        # InvalidRequestError
 
     def update_user(user_id: int, **kwargs) -> None:
         """Updates user
@@ -75,8 +74,8 @@ class DB:
             self.session
         except Exception as e:
             raise(e)
-        # update user 
+        # update user
         # commit changes
-        #if value not found in user:
+        # if value not found in user:
         #    raise ValueError
         pass
