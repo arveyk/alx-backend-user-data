@@ -77,7 +77,7 @@ class Auth:
         """
         return str(uuid.uuid4())
 
-    def create_session(self, email: str):
+    def create_session(self, email: str) -> bool:
         """ Creates a session id
         Args:
             email: user email
