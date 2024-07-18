@@ -63,7 +63,7 @@ class Auth:
             passwd_byt = bytes(password.encode('utf-8'))
             is_valid_pwd = bcrypt.checkpw(passwd_byt, user.hashed_password)
 
-            if is_valid_pwd:
+            if is_valid_pwd is True:
                 return True
             return False
 
@@ -88,14 +88,14 @@ class Auth:
             user = self._db.find_user_by(**user_cred)
             session_id = self._generate_uuid()
             user.session_id = session_id
-            
+
             sess_cred = {"session_id": session_id}
-            self._db.update_user(user.id. **sess_cred)
+            self._db.update_user(user.id, **sess_cred)
             return session_id
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(session_id: str) -> TypeVar('User'):
+    def get_user_from_session_id(self, session_id: str) -> TypeVar('User'):
         """ Gets a user by the session id given
         Args:
             session_id: user's session id
@@ -106,11 +106,11 @@ class Auth:
         user_cred = {"session_id": session_id}
         try:
             user = self._db.find_user_by(**user_cred)
-            return user.session_id
+            return user
         except NoResultFound:
             return None
 
-    def destroy_session(user_id: int) -> None:
+    def destroy_session(self, user_id: int) -> None:
         """Destroys a session
         """
         if user_id is None:
@@ -121,3 +121,19 @@ class Auth:
 
         self.update_user(user_id, **sess_cred)
         return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Gets a reset password token
+        Args:
+            email: user email
+        Returns: reset token
+        """
+        user_cred = {"email": email}
+        try:
+            user = self._db.find_user_by(**user_cred)
+            token = self._generate_uuid()
+            token_cred = {"reset_token": token_cred}
+            self._db.update_user(user.id, **token)
+            return token
+        except NoResultFound:
+            raise ValueError

@@ -4,7 +4,7 @@ App module
 """
 import requests
 from auth import Auth
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, abort
 
 AUTH = Auth()
 
@@ -12,13 +12,13 @@ app = Flask(__name__)
 
 
 @app.route("/", methods=['GET'], strict_slashes=False)
-def home():
+def home() -> str:
     msg = {"message": "Bienvenue"}
     return jsonify(msg)
 
 
 @app.route('/users/', methods=['POST'], strict_slashes=False)
-def users():
+def users() -> str:
     """Registers users
     Args: none
     Returns: 200 if ok 400 if user is not existent
@@ -36,7 +36,7 @@ def users():
 
 
 @app.route('/sessions/', methods=["POST"], strict_slashes=False)
-def login():
+def login() -> str:
     """Function to login
     Args: None
     Returns:
@@ -44,24 +44,41 @@ def login():
     email = request.form.get("email")
     is_user = AUTH.valid_login(email, request.form.get("password"))
     if is_user is False:
-        flask.abort(401)
-    cookie = AUTH.create_session(email)
-    response.set_cookie("session_id", cookie)
-    return jsonify({"email": email, "message": "logged in"})
+        abort(401)
+    try:
+        session_id = AUTH.create_session(email)
+        response.set_cookie("session_id", session_id)
+        return jsonify({"email": email, "message": "logged in"})
+    except ValueError:
+        abort(401)
 
 
 @app.route('/sessions/', methods=['DELETE'], strict_slashes=False)
-def logout():
+def logout() -> str:
     """Logout funtion
     Args: No args
     Returns: respose
     """
-    session_id = request.form.get("session_id")
-    user = Auth.get_user_from_session_id(session_id)
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         return 403
-    Auth.destroy_session(user.id)
+    AUTH.destroy_session(user.id)
     return redirect('/')
+
+
+@app.route('/profile/', methods=['GET'], strict_slashes=False)
+def profile() -> str:
+    """Get user profile
+    Args:
+        request
+    Returns: user profile
+    """
+    cookie = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(cookie)
+    if user is None:
+        return 403
+    return 200, jsonify({"email": user.email})
 
 
 if __name__ == "__main__":

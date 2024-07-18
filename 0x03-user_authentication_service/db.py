@@ -92,13 +92,18 @@ class DB:
         Args:
         Returns:
         """
-        try:
-            arg_find = {"id": user_id}
-            user = self.find_user_by(**arg_find)
-            passwd = list(kwargs.values())
+        # rows = self._session.query(User).filter(User.id = user_id).one()
 
-            user.hashed_password = passwd[0]
-            self._session.commit()
-            self._session.close()
-        except Exception as e:
-            raise(e)
+        arg_find = {"id": user_id}
+        user = self.find_user_by(**arg_find)
+        update_val = list(kwargs.values())
+        update_key = list(kwargs.keys())
+        param_list = ["id", "email", "hashed_password", "session_id"
+                      "reset_token"
+                      ]
+        if update_key[0] not in param_list:
+            raise ValueError
+        setattr(user, update_key[0], update_val[0])
+
+        self._session.commit()
+        self._session.close()
