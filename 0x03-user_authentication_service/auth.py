@@ -67,9 +67,28 @@ class Auth:
             return True
         return False
 
-    def _generate_uuid() -> str:
+    def _generate_uuid(self) -> str:
         """ Generates a uuid
         Args: No arguments
         Returns: uuid
         """
         return str(uuid.uuid4().hex)
+
+    def create_session(self, email: str):
+        """ Creates a session id
+        Args:
+            email: user email
+        Returns: session id
+        """
+        try:
+            user_cred = {"email": email}
+            user = self._db.find_user_by(**user_cred)
+            session_id = self._generate_uuid()
+            user.session_id = session_id
+            self._db._session.commit()
+            self._db._session.close()
+            return session_id
+        except NoResultFound:
+            return None
+
+
