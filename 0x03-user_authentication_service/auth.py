@@ -5,6 +5,7 @@ import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
 from typing import TypeVar
+from user import User
 
 
 def _hash_password(password: str) -> bytes:
@@ -45,3 +46,22 @@ class Auth:
             hpwd = _hash_password(password)
             user = self._db.add_user(email, hpwd)
             return user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """Validates a login
+        Args:
+            email: user email
+            password: login password
+        Returns: True if valid, False if invalid login
+        """
+        user = self._db._session.query(User).filter(
+                                                User.email == email).first()
+        if user is None:
+            return False
+
+        passwd_byt = bytes(password.encode('utf-8'))
+        is_valid_pwd = bcrypt.checkpw(passwd_byt, user.hashed_password)
+
+        if is_valid_pwd:
+            return True
+        return False
