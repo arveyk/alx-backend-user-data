@@ -72,7 +72,7 @@ class Auth:
         Args: No arguments
         Returns: uuid
         """
-        return str(uuid.uuid4().hex)
+        return str(uuid.uuid4())
 
     def create_session(self, email: str):
         """ Creates a session id
