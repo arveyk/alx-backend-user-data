@@ -16,15 +16,15 @@ def home():
     msg = {"message": "Bienvenue"}
     return jsonify(msg)
 
+
 @app.route('/users', methods=['POST'])
 def users(requests):
     """Registers users
     """
     # search for user
     data = {"email": email, "password": password}
-    #if user does not exist
+    # if user does not exist
     return jsonify({"message": "email already registered"}), 400
-
 
 
 if __name__ == "__main__":
