@@ -88,8 +88,9 @@ class Auth:
             user = self._db.find_user_by(**user_cred)
             session_id = self._generate_uuid()
             user.session_id = session_id
-            self._db._session.commit()
-            self._db._session.close()
+            
+            sess_cred = {"session_id": session_id}
+            self._db.update_user(user.id. **sess_cred)
             return session_id
         except NoResultFound:
             return None
