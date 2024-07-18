@@ -4,7 +4,8 @@
 from typing import TypeVar, Any, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.exc import InvalidRequestError, NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 
@@ -92,16 +93,12 @@ class DB:
         Returns:
         """
         try:
-            user = self.find_user_by(user_id)
+            arg_find = {"id": user_id}
+            user = self.find_user_by(**arg_find)
             passwd = list(kwargs.values())
-            print(passwd)
 
             user.hashed_password = passwd[0]
-            session = self._session()
-            session.commit()
+            self._session.commit()
+            self._session.close()
         except Exception as e:
             raise(e)
-        # update user
-        # commit changes
-        # if value not found in user:
-        #    raise ValueError
