@@ -93,3 +93,30 @@ class Auth:
             return session_id
         except NoResultFound:
             return None
+
+    def get_user_from_session_id(session_id: str) -> TypeVar('User'):
+        """ Gets a user by the session id given
+        Args:
+            session_id: user's session id
+        Returns: the user object
+        """
+        if session_id is None:
+            return None
+        user_cred = {"session_id": session_id}
+        try:
+            user = self._db.find_user_by(**user_cred)
+            return user.session_id
+        except NoResultFound:
+            return None
+
+    def destroy_session(user_id: int) -> None:
+        """Destroys a session
+        """
+        if user_id is None:
+            return None
+        user_cred = {"id": user_id}
+        user = self._db.find_user_by(**user_cred)
+        sess_cred = {"session_id": None}
+
+        self.update_user(user_id, **sess_cred)
+        return None
