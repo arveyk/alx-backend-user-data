@@ -20,6 +20,8 @@ def home():
 @app.route('/users/', methods=['POST'], strict_slashes=False)
 def users():
     """Registers users
+    Args: none
+    Returns: 200 if ok 400 if user is not existent
     """
     # search for user
     # if user does not exist
@@ -31,6 +33,20 @@ def users():
     except ValueError as VE:
         print(VE)
         return jsonify({"message": "email already registered"}), 400
+
+@app.route('/sessions/', methods=["POST"], strict_slashes=False)
+def login():
+    """Function to login
+    Args: None
+    Returns:
+    """
+    email = request.form.get("email")
+    is_user = Auth.valid_login(email, request.form.get("password"))
+    if is_user is False:
+        flask.abort(401)
+    cookie = Auth.create_session(email)
+    response.set_cookie("session_id", cookie)
+    return jsonify({"email": email, "message": "logged in"})
 
 
 if __name__ == "__main__":
