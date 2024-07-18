@@ -93,5 +93,3 @@ class Auth:
             return session_id
         except NoResultFound:
             return None
-
-
