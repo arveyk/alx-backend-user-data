@@ -55,17 +55,20 @@ class Auth:
             password: login password
         Returns: True if valid, False if invalid login
         """
-        user = self._db._session.query(User).filter(
-                                                User.email == email).first()
-        if user is None:
+        # user = self._db._session.query(User).filter(
+        #                                        User.email == email).first()
+        try:
+            user_cred = {"email": email}
+            user = self._db.find_user_by(**user_cred)
+            passwd_byt = bytes(password.encode('utf-8'))
+            is_valid_pwd = bcrypt.checkpw(passwd_byt, user.hashed_password)
+
+            if is_valid_pwd:
+                return True
             return False
 
-        passwd_byt = bytes(password.encode('utf-8'))
-        is_valid_pwd = bcrypt.checkpw(passwd_byt, user.hashed_password)
-
-        if is_valid_pwd:
-            return True
-        return False
+        except NoResultFound:
+            return False
 
     def _generate_uuid(self) -> str:
         """ Generates a uuid
