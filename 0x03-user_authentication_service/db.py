@@ -52,30 +52,57 @@ class DB:
         Returns: first row found in users"""
         try:
             result = ""
-            key1 = list(kwarg.values())
-            result = self.__session.query(User).filter(
-                    User.email == key1[0]).one()
-            return result
+            key = list(kwarg.keys())
+            value = list(kwarg.values())
+            rows = self._session.query(User).all()
+
+            param_list = ["id", "email", "hashed_password", "session_id"
+                          "reset_token"
+                          ]
+            if key[0] not in param_list:
+                raise(InvalidRequestError)
+            if key[0] == param_list[0]:
+                row = self._session.query(User).filter_by(
+                        id=value[0]).one()
+                return row
+            elif key[0] == param_list[1]:
+                row = self._session.query(User).filter_by(
+                         email=value[0]).one()
+                return row
+            elif key[0] == param_list[2]:
+                row = self._session.query(User).filter(
+                        hashed_password=value[0]).one()
+                return row
+            elif key[0] == param_list[3]:
+                row = self._session.query(User).filter(
+                        session_id=value[0]).one()
+                return row
+            elif key[0] == param_list[4]:
+                row = self._session.query(User).filter(
+                        reset_token=value[0]).one()
+                return row
+
         except NoResultFound as err:
             raise(err)
         except InvalidRequestError as invalid:
             raise(invalid)
-        # query and filter by input argument
-        # NoResultFound
-        # InvalidRequestError
 
-    def update_user(user_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Updates user
         Args:
         Returns:
         """
         try:
             user = self.find_user_by(user_id)
-            self.session
+            passwd = list(kwargs.values())
+            print(passwd)
+
+            user.hashed_password = passwd[0]
+            session = self._session()
+            session.commit()
         except Exception as e:
             raise(e)
         # update user
         # commit changes
         # if value not found in user:
         #    raise ValueError
-        pass
