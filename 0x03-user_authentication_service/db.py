@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB Module
 """
-from typing import TypeVar
+from typing import TypeVar, Any, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import InvalidRequestError
@@ -45,7 +45,7 @@ class DB:
         session.commit()
         return person
 
-    def find_user_by(self, **kwarg):
+    def find_user_by(self, **kwarg: Dict[str, Any]) -> TypeVar('User'):
         """Find user in database
         Args:
             kwargs: keyword arguments
@@ -87,7 +87,7 @@ class DB:
         except InvalidRequestError as invalid:
             raise(invalid)
 
-    def update_user(self, user_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
         """Updates user
         Args:
         Returns:
