@@ -72,4 +72,4 @@ class Auth:
         Args: No arguments
         Returns: uuid
         """
-        return uuid.uuid4().hex
+        return str(uuid.uuid4().hex)
