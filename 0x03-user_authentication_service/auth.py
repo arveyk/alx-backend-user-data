@@ -138,7 +138,7 @@ class Auth:
         except NoResultFound:
             raise ValueError
 
-    def update_password(reset_token: str, password: str) -> None:
+    def update_password(self, reset_token: str, password: str) -> None:
         """Updates user password
         Args:
             reset_token: string to check if reset should be done

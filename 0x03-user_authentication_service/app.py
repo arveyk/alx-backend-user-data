@@ -98,5 +98,28 @@ def get_reset_password_token() -> str:
         return 403
 
 
+@app.route('/reset_password/', methods=['PUT'], strict_slashes=False)
+def update_password() -> str:
+    """Updates a users password
+    Args:
+        request
+    Returns:
+        403 if token is invalid
+        200 if update is successful
+    """
+    email = request.get("email")
+    reset = request.get("reset_token")
+    new_pwd = request.get("new_password")
+    try:
+        email_cred = {"email", email}
+        user = AUTH._db.find_user_by(**email_cred)
+        if user.reset_token == reset:
+            AUTH.update_password(reset, new_pwd)
+            return 200, jsonify({"email": email, "message": "Password updated"})
+    except NoResultFound:
+        return 403
+
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
