@@ -2,13 +2,14 @@
 """Auth Module
 """
 import bcrypt
+import uuid
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
-from typing import TypeVar
+from typing import TypeVar, ByteString
 from user import User
 
 
-def _hash_password(password: str) -> bytes:
+def _hash_password(password: str) -> ByteString:
     """function to Hash a password
     Args:
         password: users password string to be hashed
@@ -65,3 +66,10 @@ class Auth:
         if is_valid_pwd:
             return True
         return False
+
+    def _generate_uuid() -> str:
+        """ Generates a uuid
+        Args: No arguments
+        Returns: uuid
+        """
+        return str(uuid.uuid4())
