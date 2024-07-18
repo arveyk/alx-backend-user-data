@@ -4,7 +4,7 @@ App module
 """
 import requests
 from auth import Auth
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 
 AUTH = Auth()
 
@@ -42,12 +42,26 @@ def login():
     Returns:
     """
     email = request.form.get("email")
-    is_user = Auth.valid_login(email, request.form.get("password"))
+    is_user = AUTH.valid_login(email, request.form.get("password"))
     if is_user is False:
         flask.abort(401)
-    cookie = Auth.create_session(email)
+    cookie = AUTH.create_session(email)
     response.set_cookie("session_id", cookie)
     return jsonify({"email": email, "message": "logged in"})
+
+
+@app.route('/sessions/', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """Logout funtion
+    Args: No args
+    Returns: respose
+    """
+    session_id = request.form.get("session_id")
+    user = Auth.get_user_from_session_id(session_id)
+    if user is None:
+        return 403
+    Auth.destroy_session(user.id)
+    return redirect('/')
 
 
 if __name__ == "__main__":
