@@ -87,7 +87,7 @@ class DB:
         except InvalidRequestError as invalid:
             raise(invalid)
 
-    def update_user(self, user_id: int, **kwargs: Dict[str, Any]):
+    def update_user(self, user_id: int, **kwargs) -> None:
         """Updates user
         Args:
         Returns:
