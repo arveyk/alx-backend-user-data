@@ -5,7 +5,7 @@ import bcrypt
 import uuid
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
-from typing import TypeVar, Union
+from typing import Union
 from user import User
 
 
@@ -28,7 +28,7 @@ class Auth:
         """
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> TypeVar('User'):
+    def register_user(self, email: str, password: str) -> User:
         """Registers a user into the database
         Args:
             email: users email
@@ -95,7 +95,7 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(self, session_id: str) -> TypeVar('User'):
+    def get_user_from_session_id(self, session_id: str) -> User:
         """ Gets a user by the session id given
         Args:
             session_id: user's session id
