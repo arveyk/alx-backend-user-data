@@ -8,7 +8,13 @@ Base = declarative_base()
 
 
 class User(Base):
-    """User class
+    """User class for declaring a database table
+    Rows:
+        id: primary key of table
+        email: user string email
+        hashed_password: user hashed password
+        session_id: string to be used every time the user is logged-in
+        reset_token: token to reset password
     """
     __tablename__ = "users"
 
