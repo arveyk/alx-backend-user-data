@@ -2,9 +2,63 @@
 """
 Main file
 """
+import requests
+
+
+def register_user(email: str, password: str) -> None:
+    """
+    """
+    pass
+
+
+def log_in_wrong_password(email: str, password: str) -> None:
+    """
+    """
+    pass
+
+
+def log_in(email: str, password: str) -> str:
+    """
+    """
+    pass
+
+
+def profile_unlogged() -> None:
+    """
+    """
+    pass
+
+
+def profile_logged(session_id: str) -> None:
+    """
+
+    """
+    pass
+
+
+def log_out(session_id: str) -> None:
+    """
+    """
+
+    pass
+
+
+def reset_password_token(email: str) -> str:
+    """
+    """
+    pass
+
+
+def update_password(email: str, reset_token: str, new_password: str) -> None:
+    """
+    """
+    pass
+
+
 EMAIL = "guillaume@holberton.io"
 PASSWD = "b4l0u"
 NEW_PASSWD = "t4rt1fl3tt3"
+
 
 if __name__ == "__main__":
     register_user(EMAIL, PASSWD)

@@ -81,7 +81,7 @@ def profile() -> str:
     return 200, jsonify({"email": user.email})
 
 
-@app.route('/reset_password/', methods=['POST'], strict_slashes=False )
+@app.route('/reset_password/', methods=['POST'], strict_slashes=False)
 def get_reset_password_token() -> str:
     """Get a reset password token
     Args:
@@ -92,7 +92,7 @@ def get_reset_password_token() -> str:
     user_cred = {"email": email}
     try:
         user = AUTH._db.find_user_by(**user_cred)
-        token = AUTH.get_reset_password_token(email)        
+        token = AUTH.get_reset_password_token(email)
         return jsonify({"email": email, "reset_token": token})
     except NoResultFound:
         return 403
@@ -115,10 +115,10 @@ def update_password() -> str:
         user = AUTH._db.find_user_by(**email_cred)
         if user.reset_token == reset:
             AUTH.update_password(reset, new_pwd)
-            return 200, jsonify({"email": email, "message": "Password updated"})
+            return 200, jsonify({"email": email,
+                                "message": "Password updated"})
     except NoResultFound:
         return 403
-
 
 
 if __name__ == "__main__":
