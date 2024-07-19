@@ -45,7 +45,7 @@ class DB:
         session.commit()
         return person
 
-    def find_user_by(self, **kwarg: Dict[str, Any]) -> TypeVar('User'):
+    def find_user_by(self, **kwarg: Dict[str, Any]) -> User:
         """Find user in database
         Args:
             kwargs: keyword arguments
