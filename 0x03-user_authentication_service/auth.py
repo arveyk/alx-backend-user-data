@@ -20,6 +20,14 @@ def _hash_password(password: str) -> bytes:
     return hpasswd
 
 
+def _generate_uuid() -> str:
+    """ Generates a uuid
+    Args: No arguments
+    Returns: uuid
+   """
+    return uuid.uuid4().__str__()
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -68,13 +76,6 @@ class Auth:
         except NoResultFound:
             return False
 
-    def _generate_uuid(self) -> str:
-        """ Generates a uuid
-        Args: No arguments
-        Returns: uuid
-        """
-        return uuid.uuid4().__str__()
-
     def create_session(self, email: str) -> Union[str, None]:
         """ Creates a session id
         Args:
@@ -84,7 +85,7 @@ class Auth:
         try:
             user_cred = {"email": email}
             user = self._db.find_user_by(**user_cred)
-            session_id = self._generate_uuid()
+            session_id = _generate_uuid()
             user.session_id = session_id
 
             sess_cred = {"session_id": session_id}
@@ -129,7 +130,7 @@ class Auth:
         user_cred = {"email": email}
         try:
             user = self._db.find_user_by(**user_cred)
-            token = self._generate_uuid()
+            token = _generate_uuid()
             token_cred = {"reset_token": token_cred}
             self._db.update_user(user.id, **token)
             return token
