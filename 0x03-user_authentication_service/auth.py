@@ -9,7 +9,7 @@ from typing import TypeVar, ByteString, Union
 from user import User
 
 
-def _hash_password(password: str) -> ByteString:
+def _hash_password(password: str) -> bytes:
     """function to Hash a password
     Args:
         password: users password string to be hashed
