@@ -45,7 +45,7 @@ class DB:
         session.commit()
         return person
 
-    def find_user_by(self, **kwarg: Dict[str, Any]) -> User:
+    def find_user_by(self, **kwarg) -> User:
         """Find user in database
         Args:
             kwargs: keyword arguments
@@ -87,7 +87,7 @@ class DB:
         except InvalidRequestError as invalid:
             raise(invalid)
 
-    def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
+    def update_user(self, user_id: int, **kwargs: Dict[str, Any]):
         """Updates user
         Args:
         Returns:
