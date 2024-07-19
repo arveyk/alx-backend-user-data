@@ -73,7 +73,7 @@ class Auth:
         Args: No arguments
         Returns: uuid
         """
-        return str(uuid.uuid4())
+        return (uuid.uuid4())
 
     def create_session(self, email: str) -> Union[str, None]:
         """ Creates a session id
