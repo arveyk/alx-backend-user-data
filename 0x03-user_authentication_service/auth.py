@@ -55,8 +55,6 @@ class Auth:
             password: login password
         Returns: True if valid, False if invalid login
         """
-        # user = self._db._session.query(User).filter(
-        #                                        User.email == email).first()
         try:
             user_cred = {"email": email}
             user = self._db.find_user_by(**user_cred)
